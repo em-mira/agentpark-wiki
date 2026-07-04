@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentPark – Wikipedia</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #202122;
+      background: #fff;
+    }
+    a { color: #3366cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Top navigation bar ── */
+    #topbar {
+      background: #fff;
+      border-bottom: 1px solid #a7d7f9;
+      padding: 4px 0;
+    }
+    #topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    #topbar .site-name {
+      font-family: 'Linux Libertine', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: #000;
+      letter-spacing: -0.5px;
+    }
+    #topbar .site-tag {
+      font-size: 12px;
+      color: #54595d;
+    }
+    #topbar .spacer { flex: 1; }
+    #topbar .search-box {
+      display: flex;
+      gap: 4px;
+    }
+    #topbar .search-box input {
+      border: 1px solid #a2a9b1;
+      border-radius: 2px;
+      padding: 4px 8px;
+      font-size: 13px;
+      width: 220px;
+    }
+    #topbar .search-box button {
+      background: #f8f9fa;
+      border: 1px solid #a2a9b1;
+      border-radius: 2px;
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* ── Page layout ── */
+    #page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 16px 40px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 0 24px;
+    }
+
+    /* ── Article column ── */
+    #content { min-width: 0; }
+
+    #article-title {
+      font-family: 'Linux Libertine', 'Georgia', serif;
+      font-size: 28px;
+      font-weight: normal;
+      border-bottom: 1px solid #a2a9b1;
+      padding: 8px 0 4px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+    .tagline {
+      font-size: 13px;
+      color: #54595d;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    /* Hatnote */
+    .hatnote {
+      padding: 2px 0 2px 1.6em;
+      margin-bottom: 12px;
+      color: #54595d;
+      font-size: 13px;
+    }
+
+    /* TOC */
+    #toc {
+      background: #f8f9fa;
+      border: 1px solid #a2a9b1;
+      display: inline-block;
+      padding: 12px 20px 12px 12px;
+      margin: 12px 0 16px 0;
+      font-size: 14px;
+      min-width: 200px;
+    }
+    #toc-title {
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    #toc ol { padding-left: 24px; }
+    #toc li { margin: 2px 0; }
+    #toc a { color: #202122; }
+
+    /* Sections */
+    h2 {
+      font-family: 'Linux Libertine', 'Georgia', serif;
+      font-size: 20px;
+      font-weight: normal;
+      border-bottom: 1px solid #a2a9b1;
+      padding-bottom: 3px;
+      margin: 20px 0 8px;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 14px 0 6px;
+    }
+    p { margin-bottom: 10px; }
+    ul, ol { padding-left: 28px; margin-bottom: 10px; }
+    li { margin-bottom: 4px; }
+
+    /* Info box (sidebar) */
+    #infobox {
+      float: right;
+      clear: right;
+      margin: 8px 0 16px 20px;
+      background: #f8f9fa;
+      border: 1px solid #a2a9b1;
+      font-size: 13px;
+      width: 260px;
+    }
+    #infobox-title {
+      background: #cee0f2;
+      text-align: center;
+      font-weight: bold;
+      padding: 6px 8px;
+      font-size: 14px;
+    }
+    #infobox table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #infobox th {
+      background: #dce2e9;
+      padding: 4px 8px;
+      text-align: left;
+      font-weight: normal;
+      color: #54595d;
+      width: 40%;
+      vertical-align: top;
+    }
+    #infobox td {
+      padding: 4px 8px;
+      vertical-align: top;
+    }
+    #infobox tr + tr th,
+    #infobox tr + tr td {
+      border-top: 1px solid #dce2e9;
+    }
+
+    /* Sidebar column (right) */
+    #sidebar {
+      padding-top: 8px;
+      font-size: 13px;
+    }
+    .side-box {
+      border: 1px solid #a2a9b1;
+      background: #f8f9fa;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+    }
+    .side-box-title {
+      background: #cee0f2;
+      font-weight: bold;
+      padding: 4px 8px;
+      margin: -10px -12px 8px;
+      font-size: 13px;
+    }
+    .side-box ul { padding-left: 18px; margin: 0; }
+    .side-box li { margin-bottom: 3px; }
+
+    /* Categories */
+    #categories {
+      border-top: 1px solid #a2a9b1;
+      padding-top: 8px;
+      margin-top: 24px;
+      font-size: 13px;
+    }
+    #categories strong { display: block; margin-bottom: 4px; }
+    .cat-list { display: flex; flex-wrap: wrap; gap: 6px 0; }
+    .cat-list a {
+      display: inline-block;
+      padding: 1px 6px;
+      background: #f8f9fa;
+      border: 1px solid #a2a9b1;
+      border-radius: 2px;
+      margin-right: 6px;
+    }
+
+    /* Footer */
+    #footer {
+      border-top: 1px solid #a2a9b1;
+      margin-top: 32px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #54595d;
+      text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      #page { grid-template-columns: 1fr; }
+      #sidebar { display: none; }
+      #infobox { float: none; width: 100%; margin: 0 0 16px 0; }
+      #topbar .search-box input { width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top navigation bar ── -->
+<div id="topbar">
+  <div id="topbar-inner">
+    <span class="site-name">AgentPark Wiki</span>
+    <span class="site-tag">The free AI-agent encyclopedia</span>
+    <div class="spacer"></div>
+    <div class="search-box">
+      <input type="text" placeholder="Search AgentPark Wiki" aria-label="Search" />
+      <button type="button">Search</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main page layout ── -->
+<div id="page">
+
+  <!-- ── Article column ── -->
+  <main id="content">
+
+    <h1 id="article-title">AgentPark</h1>
+    <p class="tagline">From AgentPark Wiki, the free AI-agent encyclopedia</p>
+
+    <!-- Infobox (floated right) -->
+    <div id="infobox">
+      <div id="infobox-title">AgentPark</div>
+      <table>
+        <tr>
+          <th>Type</th>
+          <td>AI Agent Platform &amp; Marketplace</td>
+        </tr>
+        <tr>
+          <th>Industry</th>
+          <td>Artificial Intelligence, Software</td>
+        </tr>
+        <tr>
+          <th>Focus</th>
+          <td>Autonomous AI agents, multi-agent orchestration</td>
+        </tr>
+        <tr>
+          <th>Key features</th>
+          <td>Agent discovery, deployment, monitoring, and orchestration</td>
+        </tr>
+        <tr>
+          <th>Website</th>
+          <td><a href="#">agentpark.ai</a></td>
+        </tr>
+      </table>
+    </div>
+
+    <p>
+      <b>AgentPark</b> is a platform and marketplace for discovering, deploying, and orchestrating
+      autonomous AI agents. It provides developers, enterprises, and researchers with a unified
+      environment in which AI agents—software programs that perceive their environment and take
+      actions to achieve goals—can be published, found, combined into workflows, and monitored
+      at scale.
+    </p>
+    <p>
+      AgentPark occupies a role in the AI ecosystem analogous to the function that app stores serve
+      for mobile applications: it lowers the barrier to accessing specialised AI capabilities by
+      centralising discovery and providing standardised interfaces for integration.
+    </p>
+
+    <!-- Table of contents -->
+    <nav id="toc" aria-label="Table of contents">
+      <div id="toc-title">Contents</div>
+      <ol>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#background">Background and motivation</a></li>
+        <li><a href="#architecture">Architecture</a>
+          <ol>
+            <li><a href="#agent-registry">Agent registry</a></li>
+            <li><a href="#orchestration">Orchestration engine</a></li>
+            <li><a href="#runtime">Agent runtime</a></li>
+          </ol>
+        </li>
+        <li><a href="#key-concepts">Key concepts</a></li>
+        <li><a href="#use-cases">Use cases</a></li>
+        <li><a href="#ecosystem">Ecosystem and community</a></li>
+        <li><a href="#comparison">Comparison with related projects</a></li>
+        <li><a href="#see-also">See also</a></li>
+        <li><a href="#references">References</a></li>
+      </ol>
+    </nav>
+
+    <!-- 1. Overview -->
+    <h2 id="overview">1&nbsp;&nbsp;Overview</h2>
+    <p>
+      AgentPark is designed around the premise that individual AI agents are most valuable when they
+      can be composed with other agents and tools. The platform exposes a registry of agents, each
+      described by a capability manifest, that third-party developers can publish and that other
+      users can integrate into their own applications or automated pipelines.
+    </p>
+    <p>
+      Core offerings include:
+    </p>
+    <ul>
+      <li>A searchable catalogue of AI agents with structured metadata (capabilities, input/output
+          schemas, latency, pricing).</li>
+      <li>An orchestration engine for defining multi-agent workflows using declarative or code-based
+          specifications.</li>
+      <li>A sandboxed runtime that executes agents in isolation, enforcing resource quotas and
+          security policies.</li>
+      <li>An observability layer providing real-time tracing, logging, and performance dashboards.</li>
+    </ul>
+
+    <!-- 2. Background -->
+    <h2 id="background">2&nbsp;&nbsp;Background and motivation</h2>
+    <p>
+      The emergence of large language models (LLMs) capable of reasoning and tool use from around
+      2022 onwards prompted widespread interest in <i>agentic</i> AI systems—systems that pursue
+      multi-step goals with varying degrees of autonomy. Early agent frameworks such as
+      <a href="#">LangChain</a> and <a href="#">AutoGPT</a> demonstrated the potential but also
+      exposed practical challenges: agents were difficult to distribute, reuse across organisations,
+      and govern at runtime.
+    </p>
+    <p>
+      AgentPark was conceived to address these gaps by providing infrastructure that separates agent
+      <i>definition</i> (what an agent does) from agent <i>deployment</i> (where and how it runs),
+      and by introducing a marketplace model that creates economic incentives for the development of
+      high-quality, specialised agents.
+    </p>
+
+    <!-- 3. Architecture -->
+    <h2 id="architecture">3&nbsp;&nbsp;Architecture</h2>
+    <p>
+      AgentPark follows a layered architecture composed of three principal subsystems.
+    </p>
+
+    <h3 id="agent-registry">3.1&nbsp;Agent registry</h3>
+    <p>
+      The agent registry is the central catalogue of all published agents. Each entry contains:
+    </p>
+    <ul>
+      <li>A <i>capability manifest</i> describing the agent's purpose, accepted inputs, produced
+          outputs, and any external services it depends on.</li>
+      <li>Versioned artefacts (container images or serialised model weights) that constitute the
+          runnable agent.</li>
+      <li>A trust rating derived from automated safety evaluations and community feedback.</li>
+    </ul>
+
+    <h3 id="orchestration">3.2&nbsp;Orchestration engine</h3>
+    <p>
+      The orchestration engine allows users to compose multiple agents into directed acyclic graphs
+      (DAGs) or more complex topologies. Composition can be expressed in a YAML-based workflow
+      language or via a visual drag-and-drop editor. The engine handles:
+    </p>
+    <ul>
+      <li>Routing data between agents.</li>
+      <li>Parallel and conditional execution branches.</li>
+      <li>Retry and fallback strategies.</li>
+      <li>Human-in-the-loop approval checkpoints.</li>
+    </ul>
+
+    <h3 id="runtime">3.3&nbsp;Agent runtime</h3>
+    <p>
+      Agents execute inside a secure runtime that provides process-level isolation, network egress
+      filtering, and per-invocation resource limits (CPU, memory, wall-clock time). The runtime
+      exposes a standardised tool-call interface so that agents built on different underlying
+      frameworks can interoperate without modification.
+    </p>
+
+    <!-- 4. Key concepts -->
+    <h2 id="key-concepts">4&nbsp;&nbsp;Key concepts</h2>
+    <p>Several concepts are fundamental to understanding AgentPark's design:</p>
+    <ul>
+      <li>
+        <b>Agent</b> – An autonomous software entity that accepts a task description and a set of
+        tools, then produces outputs by iteratively reasoning and acting until the task is complete
+        or a stopping condition is reached.
+      </li>
+      <li>
+        <b>Tool</b> – A discrete function (e.g., web search, code execution, database query) that
+        an agent can invoke during its reasoning loop.
+      </li>
+      <li>
+        <b>Workflow</b> – A composition of one or more agents and tools, wired together to
+        accomplish a larger goal.
+      </li>
+      <li>
+        <b>Capability manifest</b> – A machine-readable document that describes what an agent can
+        do, enabling automated discovery and compatibility checking.
+      </li>
+      <li>
+        <b>Trust score</b> – A numeric rating that summarises an agent's safety and reliability
+        based on automated evaluations and user reviews.
+      </li>
+    </ul>
+
+    <!-- 5. Use cases -->
+    <h2 id="use-cases">5&nbsp;&nbsp;Use cases</h2>
+    <p>
+      AgentPark has been applied in a variety of domains, including:
+    </p>
+    <ul>
+      <li><b>Software development</b> – Code review agents, automated testing pipelines, and
+          documentation generation.</li>
+      <li><b>Research assistance</b> – Literature search, data extraction, and report synthesis
+          across large corpora of scientific papers.</li>
+      <li><b>Customer support</b> – Multi-turn dialogue agents that resolve customer queries by
+          integrating with CRM and ticketing systems.</li>
+      <li><b>Data analytics</b> – Agents that query databases, run statistical analyses, and
+          produce natural-language summaries for business stakeholders.</li>
+      <li><b>Content creation</b> – Coordinated pipelines of specialised agents for drafting,
+          editing, fact-checking, and publishing content.</li>
+    </ul>
+
+    <!-- 6. Ecosystem -->
+    <h2 id="ecosystem">6&nbsp;&nbsp;Ecosystem and community</h2>
+    <p>
+      AgentPark's marketplace model has fostered an ecosystem of third-party agent developers who
+      publish agents ranging from narrow domain specialists (e.g., a legal contract analyser) to
+      general-purpose reasoning assistants. The platform exposes a public API and an SDK for
+      popular languages, allowing integration into external applications.
+    </p>
+    <p>
+      A community forum and public roadmap encourage collaborative development. Open-source
+      reference agents are maintained in a public repository and serve as starting points for new
+      contributors.
+    </p>
+
+    <!-- 7. Comparison -->
+    <h2 id="comparison">7&nbsp;&nbsp;Comparison with related projects</h2>
+    <p>
+      AgentPark differs from adjacent projects in the following ways:
+    </p>
+    <ul>
+      <li>
+        <b>LangChain</b> – A framework for building agent applications. LangChain focuses on the
+        development experience; AgentPark focuses on distribution, discovery, and runtime
+        governance.
+      </li>
+      <li>
+        <b>AutoGPT</b> – An early demonstration of fully autonomous LLM-driven agents. AutoGPT is
+        a single open-source project, whereas AgentPark is a platform hosting many independent
+        agents.
+      </li>
+      <li>
+        <b>Hugging Face Hub</b> – A model and dataset registry. AgentPark is specifically designed
+        for runnable, task-performing agents rather than static model weights.
+      </li>
+    </ul>
+
+    <!-- 8. See also -->
+    <h2 id="see-also">8&nbsp;&nbsp;See also</h2>
+    <ul>
+      <li><a href="#">Autonomous agent</a></li>
+      <li><a href="#">Large language model</a></li>
+      <li><a href="#">Multi-agent system</a></li>
+      <li><a href="#">AI safety</a></li>
+      <li><a href="#">Reinforcement learning</a></li>
+    </ul>
+
+    <!-- 9. References -->
+    <h2 id="references">9&nbsp;&nbsp;References</h2>
+    <ol>
+      <li>AgentPark official documentation. <i>agentpark.ai/docs</i>.</li>
+      <li>
+        Brown, T. et al. (2020). "Language Models are Few-Shot Learners".
+        <i>Advances in Neural Information Processing Systems</i>, 33.
+      </li>
+      <li>
+        Yao, S. et al. (2023). "ReAct: Synergizing Reasoning and Acting in Language Models".
+        <i>ICLR 2023</i>.
+      </li>
+      <li>
+        Wang, L. et al. (2024). "A Survey on Large Language Model-based Autonomous Agents".
+        <i>Frontiers of Computer Science</i>.
+      </li>
+    </ol>
+
+    <!-- Categories -->
+    <div id="categories">
+      <strong>Categories:</strong>
+      <div class="cat-list">
+        <a href="#">Artificial intelligence platforms</a>
+        <a href="#">AI agent frameworks</a>
+        <a href="#">Cloud computing</a>
+        <a href="#">Machine learning infrastructure</a>
+        <a href="#">Software marketplaces</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Sidebar column ── -->
+  <aside id="sidebar">
+
+    <div class="side-box">
+      <div class="side-box-title">Quick facts</div>
+      <ul>
+        <li><b>Type:</b> AI agent platform</li>
+        <li><b>Focus:</b> Multi-agent orchestration</li>
+        <li><b>Interface:</b> API, SDK, web UI</li>
+      </ul>
+    </div>
+
+    <div class="side-box">
+      <div class="side-box-title">Related topics</div>
+      <ul>
+        <li><a href="#">Autonomous agent</a></li>
+        <li><a href="#">LLM tooling</a></li>
+        <li><a href="#">AI safety &amp; governance</a></li>
+        <li><a href="#">Multi-agent systems</a></li>
+        <li><a href="#">Prompt engineering</a></li>
+        <li><a href="#">AI orchestration</a></li>
+      </ul>
+    </div>
+
+    <div class="side-box">
+      <div class="side-box-title">Contribute</div>
+      <ul>
+        <li><a href="https://github.com/deepak-akkil/agentpark-wiki">Edit on GitHub</a></li>
+        <li><a href="https://github.com/deepak-akkil/agentpark-wiki/issues">Report an issue</a></li>
+      </ul>
+    </div>
+
+  </aside>
+
+</div><!-- /#page -->
+
+<!-- ── Footer ── -->
+<footer id="footer">
+  <p>
+    This page was last edited on
+    <time datetime="2026-07-04">4 July 2026</time>.
+    Content is available under the
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> licence
+    unless otherwise noted.
+  </p>
+  <p>
+    <a href="https://github.com/deepak-akkil/agentpark-wiki">AgentPark Wiki</a> &middot;
+    <a href="#">Privacy policy</a> &middot;
+    <a href="#">About</a>
+  </p>
+</footer>
+
+</body>
+</html>
